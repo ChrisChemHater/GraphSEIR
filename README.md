@@ -4,6 +4,7 @@ Analysis of COVID-19 spreading using the extended SEIR model.
 ## 描述 Description
 
 该模型描述一个国家的流行病传播过程。模型主题是一个图，节点代表城市，边表示城市间的人口迁移，节点内部演化采用扩展SEIR模型。模型定义如下：
+
 $$
 S(\text{Susceptible, 易感})\to E(\text{Exposed, 潜伏})\to I(\text{Infectious, 感染})\to R(\text{Recovered, 康复})
 $$
