@@ -5,11 +5,11 @@ MIN_DISTANCE = 100  # 最小城市间距，单位:km
 
 
 class SEIRDefaultParameter(object):
-    r = 100.
+    r = 20.
     beta = 0.048
     h = 0.048
-    theta = 1. / 6.
-    gamma = 1. / 21.
+    theta = 0.1
+    gamma = 0.1
 
 
 def const_transfer(S=0., E=0., I=0., R=0.):
@@ -23,7 +23,7 @@ def const_transfer(S=0., E=0., I=0., R=0.):
     return transfer
 
 
-def zipf_transfer(K=4e-4, alpha=1.):
+def zipf_transfer(K=0.04, alpha=2.):
     def transfer(start_status: "np.ndarray, shape=(4,)", end_status: "np.ndarray, shape=(4,)",
                  t: "float", distance: "float") -> "np.ndarray, shape=(4,)":
         Ns = start_status.sum()

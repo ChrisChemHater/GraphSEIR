@@ -68,7 +68,7 @@ def RK4(country: "Country", initials: "np.ndarray, shape=(H, W, 4)", time_span: 
     for idx in range(steps):
         if idx % sampling == 0:
             track[idx // sampling] = x
-            print(f"x00 = {x[0,0,:]}, step = {idx}")
+            # print(f"city22 = {x[2,2,:]}, day = {idx * step:.2f}")
 
         t = ts[idx]
         k1 = _derivative(country, x, t)
