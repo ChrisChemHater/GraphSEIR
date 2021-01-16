@@ -1,5 +1,6 @@
 # -*- encoding:utf-8 -*-
 
+# 模拟参数请见simulation.md 或 研究报告 supplement/复杂SEIR模型及其在分析新冠疫情封城政策中的应用.pdf
 import numpy as np
 import os
 from multiprocessing import Pool
@@ -13,6 +14,9 @@ R_LOCK = 3.
 
 
 def lockdown_parameter(p1, p2, time):
+    """
+    分段函数，封锁时间之前，参数为p1, 封锁之后为p2
+    """
     def parameter(status: "np.ndarray, shape=(4,)", t: "float") -> "float":
         return p2 if t >= time else p1
 
@@ -20,6 +24,9 @@ def lockdown_parameter(p1, p2, time):
 
 
 def lockdown_transfer(time):
+    """
+    分段函数，封锁之前为zipf函数，封锁之后SEIR传输为0
+    """
     def transfer(start_status: "np.ndarray, shape=(4,)", end_status: "np.ndarray, shape=(4,)",
                  t: "float", distance: "float") -> "np.ndarray, shape=(4,)":
         zipf = zipf_transfer()
@@ -29,6 +36,7 @@ def lockdown_transfer(time):
 
 
 def step(idx, lock_time):
+    # 单次模拟函数，用于多进程模拟。
     china = SimCountry((5, 5), MIN_DISTANCE)
     initials = np.zeros((5, 5, 4))
     initials[:, :, 0] = 1000.
@@ -37,7 +45,9 @@ def step(idx, lock_time):
 
     print(f"----------------- lock_time = {lock_time} --------------------")
     if not os.path.exists(f"reports/sim_{idx}"):
-        os.mkdir(f"reports/sim_{idx}")
+        os.makedirs(f"reports/sim_{idx}")
+    if not os.path.exists("results"):
+        os.mkdir("results")
     print("model initializing...")
     for i in range(china.shape[0]):
         for j in range(china.shape[1]):
@@ -63,17 +73,20 @@ def step(idx, lock_time):
     plt.close(fig)
 
 
-def main():
+def single_thread():
+    # 未使用多进程技术的模拟。并未采用
     china = SimCountry((5, 5), MIN_DISTANCE)
     initials = np.zeros((5, 5, 4))
     initials[:, :, 0] = 1000.
     initials[2, 2, 1] = 1e-4
     time_span = [0., 360.]
 
-    for idx, lock_time in zip(range(len(lock_times)), lock_times):
+    for idx, lock_time in zip(range(len(lock_times)), lock_times):single_thread
         print(f"----------------- lock_time = {lock_time} --------------------")
         if not os.path.exists(f"reports/sim_{idx}"):
-            os.mkdir(f"reports/sim_{idx}")
+            os.makedirs(f"reports/sim_{idx}")
+        if not os.path.exists("results"):
+            os.mkdir("results")
         print("model initializing...")
         for i in range(china.shape[0]):
             for j in range(china.shape[1]):

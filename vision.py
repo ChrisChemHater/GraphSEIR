@@ -1,4 +1,11 @@
 # -*- encoding:utf-8 -*-
+"""
+模拟结果的可视化
+plot_country: 绘制国家总SEIR-时间演化曲线
+plot_all: 绘制各城市SEIR-时间演化曲线
+animate: 制作国家演化视频
+report: 生成csv格式的报告表，包含国家和各城市演化过程中的感染最大值及时刻、健康人数降至50%时刻信息
+"""
 import numpy as np
 import pandas as pd
 import os
@@ -25,7 +32,7 @@ def plot_country(country: "SimCountry") -> "fig, ax":
 
 def plot_all(country: "SimCountry", directory):
     if not os.path.exists(directory):
-        os.mkdir(directory)
+        os.makedirs(directory)
 
     fig, ax = plt.subplots(dpi=170)
     _plot(ax, country.time, country.track[:, 0, 0, :])
